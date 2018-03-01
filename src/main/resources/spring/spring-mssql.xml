@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+			http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-4.3.xsd
+			">
+	<!-- Package Annotation Scan -->
+	<context:component-scan base-package="com.ba.test.app" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+
+	  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url" value="jdbc:sqlserver://192.168.0.126:1433;databaseName=RCPBETA" />
+		<property name="username" value="RCPBETAUSER" />
+		<property name="password" value="1qaz3edc" />
+    </bean>
+	<!-- DataBase Connection
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url" value="jdbc:sqlserver://192.168.0.126:1433;databaseName=RCPBETA" />
+		<property name="username" value="RCPBETAUSER" />
+		<property name="password" value="1qaz3edc" />
+	</bean>-->
+
+		<!-- Query Logging -->
+	<bean id="logDataSource" class="net.sf.log4jdbc.sql.jdbcapi.DataSourceSpy">
+		<constructor-arg ref="dataSource" />
+	</bean>
+
+
+	<!-- MYBATIS -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="logDataSource"/>
+		<property name="configLocation" value="classpath:sqlmap/mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath*:sqlmap/mssql/*-SQL.xml" />
+		<!--property name="configuration">
+			<bean class="org.apache.ibatis.session.Configuration">
+				<property name="cacheEnabled" value="true" />
+				<property name="lazyLoadingEnabled" value="true" />
+				<property name="aggressiveLazyLoading" value="true" />
+				<property name="useGeneratedKeys" value="true" />
+				<property name="defaultExecutorType" value="REUSE" />
+				<property name="defaultStatementTimeout" value="300" />
+				<property name="localCacheScope" value="SESSION" />
+				<property name="mapUnderscoreToCamelCase" value="true" />
+				<property name="callSettersOnNulls" value="true" />
+			</bean>
+		</property-->
+	</bean>
+
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" index="0" />
+	</bean>
+
+
+
+	<!-- DataBase Transaction -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="logDataSource" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED" /> <!-- Propagation 默认值 REQUIRED -->
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- Access Of Pointcut -->
+	<aop:config>
+		<aop:pointcut id="txPointcut" expression="execution (* com.ba..service..*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	</aop:config>
+
+	<aop:aspectj-autoproxy />
+
+
+
+
+
+</beans>

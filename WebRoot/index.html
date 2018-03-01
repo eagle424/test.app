@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+
+<!-- jQeury UI 样式-->
+<link rel="stylesheet" type="text/css" href="lib/jqueryui/jquery-ui.css"/>
+
+<!-- jqGrid 样式-->
+<link rel="stylesheet" type="text/css" href="lib/jqgrid/css/ui.jqgrid.css"/>
+
+
+<!-- bootstrap样式 -->
+<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css" />
+
+<!-- jqGrid bootstrap样式 -->
+
+<link rel="stylesheet" type="text/css" href="lib/jqgrid/css/ui.jqgrid-bootstrap.css" />
+
+
+<!-- jQuery -->
+<script type="text/javascript" src="lib/jquery/jquery-3.3.1.min.js"></script>
+<!-- jqGrid 国际化 -->
+<script type="text/javascript" src="lib/jqgrid/js/i18n/grid.locale-cn.js"></script>
+
+<!-- jqGrid 国际化 -->
+<script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
+
+<!-- jqGrid -->
+<script type="text/javascript" src="lib/jqgrid/js/jquery.jqGrid.min.js"></script>
+
+
+<!-- jqGrid UI -->
+<script type="text/javascript" src="lib/jqueryui/jquery-ui.js"></script>
+
+
+
+
+<script>
+
+$( function() {
+    $( "#accordion" ).accordion();
+
+
+    var mydata = [
+               { id: "1", invdate: "2007-10-01", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+               { id: "2", invdate: "2007-10-02", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+               { id: "3", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+               { id: "4", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+               { id: "5", invdate: "2007-10-05", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+               { id: "6", invdate: "2007-09-06", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+               { id: "7", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+               { id: "8", invdate: "2007-10-03", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+               { id: "9", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" }
+        ];
+
+
+        $(document).ready(function () {
+            $("#jqGrid").jqGrid({
+                datatype: "local",
+				data: mydata,
+                colModel: [
+                    { label: 'Inv No', name: 'id', width: 75, key:true },
+                    { label: 'Date', name: 'invdate', width: 90 },
+                    { label: 'Client', name: 'name', width: 100 },
+                    { label: 'Amount', name: 'amount', width: 80 },
+                    { label: 'Tax', name: 'tax', width: 80 },
+                    { label: 'Total', name: 'total', width: 80 },
+                    { label: 'Notes', name: 'note', width: 150 }
+                ],
+                pager: "#jqGridPager",
+                viewrecords: true, // show the current page, data rang and total records on the toolbar
+                height: 250,
+				width: 780,
+                //styleUI: 'Bootstrap',
+                caption: "Load jqGrid through Javascript Array",
+
+            });
+        });
+
+});
+
+
+
+
+
+
+</script>
+</head>
+<body>
+
+<table id="jqGrid"></table>
+<div id="jqGridPager"></div>
+
+<div id="accordion">
+  <h3>Section 1</h3>
+  <div>
+    <p>
+    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+    </p>
+  </div>
+  <h3>Section 2</h3>
+  <div>
+    <p>
+    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+    suscipit faucibus urna.
+    </p>
+  </div>
+  <h3>Section 3</h3>
+  <div>
+    <p>
+    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+    </p>
+    <ul>
+      <li>List item one</li>
+      <li>List item two</li>
+      <li>List item three</li>
+    </ul>
+  </div>
+  <h3>Section 4</h3>
+  <div>
+    <p>
+    Cras dictum. Pellentesque habitant morbi tristique senectus et netus
+    et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in
+    faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia
+    mauris vel est.
+    </p>
+    <p>
+    Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus.
+    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+    inceptos himenaeos.
+    </p>
+  </div>
+</div>
+
+
+
+</body>
+</html>

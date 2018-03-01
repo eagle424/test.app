@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+
+<!-- bootstrap样式 -->
+<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css" />
+<!-- bootstrap table -->
+<link rel="stylesheet" type="text/css" href="lib/bootstraptable/bootstrap-table.css">
+<!-- jQuery -->
+<script type="text/javascript" src="lib/jquery/jquery-3.3.1.min.js"></script>
+<!-- bootstrap -->
+<script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
+<!-- bootstrap table -->
+<script type="text/javascript" src="lib/bootstraptable/bootstrap-table.js"></script>
+<script type="text/javascript" src="lib/bootstraptable/bootstrap-table-locale-all.js"></script>
+
+
+
+
+
+
+<script>
+
+$(function(){
+
+	const pathname = document.location.pathname;
+	const appbase = pathname.substr(0)
+
+
+	$('#table').bootstrapTable({
+		url:  'get.do',
+	    columns: [{
+	        field: 'id',
+	        title: 'Item ID'
+	    }, {
+	        field: 'name',
+	        title: 'Item Name'
+	    }, {
+	        field: 'price',
+	        title: 'Item Price'
+	    }]
+	});
+
+});
+
+
+
+
+
+
+
+
+</script>
+
+
+</head>
+<body>
+
+
+	<table id="table"
+		   data-toolbar="#toolbar"
+           data-search="true"
+           data-show-refresh="true"
+           data-show-toggle="true"
+           data-show-columns="true"
+           data-show-export="true"
+           data-detail-view="true"
+           data-detail-formatter="detailFormatter"
+           data-minimum-count-columns="2"
+           data-show-pagination-switch="true"
+           data-pagination="true"
+           data-id-field="id"
+           data-page-list="[10, 25, 50, 100, ALL]"
+           data-show-footer="false"
+           data-side-pagination="server"
+           data-url="/examples/bootstrap_table/data"
+           data-response-handler="responseHandler"></table>
+
+
+</body>
+</html>

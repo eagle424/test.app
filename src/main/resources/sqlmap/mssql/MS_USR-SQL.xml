@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="msUsr">
+	<sql id="where">
+	WHERE  T1.CPN_ID = #{cpnId}
+    AND T1.USR_USE_ST IS NOT NULL
+		<if test="usrTp neq null and !''.equals(usrTp)">
+	AND    T1.USR_TP = #{usrTp}
+		</if>
+		<if test="usrId neq null and !''.equals(usrId)">
+	AND    T1.USR_ID LIKE '%' + #{usrId} + '%'
+		</if>
+		<if test="usrNm neq null and !''.equals(usrNm)">
+	AND    T1.LST_NM + T1.FRS_NM LIKE '%' + #{usrNm} + '%'
+		</if>
+		<if test="usrUseSt neq null and !''.equals(usrUseSt)">
+	AND    T1.USR_USE_ST = #{usrUseSt}
+		</if>
+		<if test="dptId neq null and !''.equals(dptId)">
+	AND    T1.DPT_ID = #{dptId}
+		</if>
+		<if test="bzoId neq null and !''.equals(bzoId)">
+	AND    T1.BZO_ID = #{bzoId}
+		</if>
+		<if test="usrEmpTp neq null and !''.equals( usrEmpTp )">
+	AND    T1.USR_EMP_TP = #{usrEmpTp}
+		</if>
+	</sql>
+
+	<select id="list" parameterType="java.util.Map" resultType="rcpMap">
+	/* MS_USR-SQL.xml - msUsr.list */
+	SELECT T1.USR_ID
+	      ,T1.LST_NM + T1.FRS_NM USR_NM
+	      ,T1.USR_TP
+	      ,(SELECT MAX(A.COM_CD_NM)
+	        FROM   dbo.CD_COM_CD_LIS A
+	        WHERE  A.COM_CD_DV = 'USR_TP'
+	        AND    A.LNG_DV = #{cpUsrLngDv}
+	        AND    A.COM_CD = T1.USR_TP
+	       ) USR_TP_NM
+	      ,T_BZO.LV_1_ID
+	      ,T_BZO.LV_1_NM
+	      ,T_BZO.LV_2_ID
+	      ,T_BZO.LV_2_NM
+	      ,T1.DPT_ID
+	      ,T_DPT.DPT_NM
+	      ,T1.CPN_ID
+	      ,T_CPN.CPN_NM
+	      ,T1.FIX_PHN_NO
+	      ,T1.MBL_NO
+	      ,T1.EML_ADR
+	      ,T1.USR_USE_ST
+	      ,(SELECT MAX(A.COM_CD_NM)
+	        FROM   dbo.CD_COM_CD_LIS A
+	        WHERE  A.COM_CD_DV = 'USR_USE_ST'
+	        AND    A.LNG_DV = #{cpUsrLngDv}
+	        AND    A.COM_CD = T1.USR_USE_ST
+	       ) USR_USE_ST_NM
+	FROM   dbo.MS_USR T1
+	       LEFT OUTER JOIN dbo.MS_BZO_DNM T_BZO
+	                    ON (T_BZO.CPN_ID = T1.CPN_ID
+	                        AND T_BZO.BZO_ID = T1.BZO_ID)
+	       LEFT OUTER JOIN dbo.MS_DPT T_DPT
+	                    ON (T_DPT.CPN_ID = T1.CPN_ID
+	                        AND T_DPT.DPT_ID = T1.DPT_ID)
+	       LEFT OUTER JOIN dbo.MS_CPN T_CPN
+	                    ON (T_CPN.CPN_ID = T1.CPN_ID)
+	<include refid="msUsr.where"></include>
+	ORDER BY T_BZO.LV_1_ID
+	        ,T_BZO.LV_2_ID
+	        ,T1.USR_TP
+	        ,T1.USR_ID
+	</select>
+
+	<select id="paging" parameterType="java.util.Map" resultType="rcpMap">
+	/* MS_USR-SQL.xml - msUsr.paging */
+	SELECT T1.USR_ID
+	      ,T1.LST_NM + T1.FRS_NM USR_NM
+	      ,T1.USR_TP
+	      ,(SELECT MAX(A.COM_CD_NM)
+	        FROM   dbo.CD_COM_CD_LIS A
+	        WHERE  A.COM_CD_DV = 'USR_TP'
+	        AND    A.LNG_DV = #{cpUsrLngDv}
+	        AND    A.COM_CD = T1.USR_TP
+	       ) USR_TP_NM
+	      ,T_BZO.LV_1_ID
+	      ,T_BZO.LV_1_NM
+	      ,T_BZO.LV_2_ID
+	      ,T_BZO.LV_2_NM
+	      ,T1.DPT_ID
+	      ,T_DPT.DPT_NM
+	      ,T1.CPN_ID
+	      ,T_CPN.CPN_NM
+	      ,T1.FIX_PHN_NO
+	      ,T1.MBL_NO
+	      ,T1.EML_ADR
+	      ,T1.USR_USE_ST
+	      ,(SELECT MAX(A.COM_CD_NM)
+	        FROM   dbo.CD_COM_CD_LIS A
+	        WHERE  A.COM_CD_DV = 'USR_USE_ST'
+	        AND    A.LNG_DV = #{cpUsrLngDv}
+	        AND    A.COM_CD = T1.USR_USE_ST
+	       ) USR_USE_ST_NM
+	FROM   dbo.MS_USR T1
+	       LEFT OUTER JOIN dbo.MS_BZO_DNM T_BZO
+	                    ON (T_BZO.CPN_ID = T1.CPN_ID
+	                        AND T_BZO.BZO_ID = T1.BZO_ID)
+	       LEFT OUTER JOIN dbo.MS_DPT T_DPT
+	                    ON (T_DPT.CPN_ID = T1.CPN_ID
+	                        AND T_DPT.DPT_ID = T1.DPT_ID)
+	       LEFT OUTER JOIN dbo.MS_CPN T_CPN
+	                    ON (T_CPN.CPN_ID = T1.CPN_ID)
+	<include refid="msUsr.where"></include>
+	ORDER BY T_BZO.LV_1_ID
+	        ,T_BZO.LV_2_ID
+	        ,T1.USR_TP
+	        ,T1.USR_ID
+	<include refid="include.pagingSql" />
+	</select>
+
+	<select id="pagingTotalCount" parameterType="java.util.Map" resultType="rcpMap">
+	/* MS_USR-SQL.xml - msUsr.pagingTotalCount */
+	SELECT COUNT(*) TOTAL_CNT
+	FROM   dbo.MS_USR T1
+	       LEFT OUTER JOIN dbo.MS_BZO_DNM T_BZO
+	                    ON (T_BZO.CPN_ID = T1.CPN_ID
+	                        AND T_BZO.BZO_ID = T1.BZO_ID)
+	       LEFT OUTER JOIN dbo.MS_DPT T_DPT
+	                    ON (T_DPT.CPN_ID = T1.CPN_ID
+	                        AND T_DPT.DPT_ID = T1.DPT_ID)
+	       LEFT OUTER JOIN dbo.MS_CPN T_CPN
+	                    ON (T_CPN.CPN_ID = T1.CPN_ID)
+	<include refid="msUsr.where"></include>
+	</select>
+
+	<select id="get" parameterType="java.util.Map" resultType="rcpMap">
+	/* MS_USR-SQL.xml - msUsr.get */
+	SELECT T1.CPN_ID
+	      ,T1.USR_ID
+	      ,T1.LST_NM
+	      ,T1.FRS_NM
+          ,T1.LST_NM + T1.FRS_NM USR_NM
+	      ,T2.PW_TXT
+	      ,T1.DPT_ID
+	      ,T_DPT.DPT_NM
+	      ,T1.NAT_CD
+	      ,T1.MBL_NO
+	      ,T1.EML_ADR
+	      ,T1.ZIP_CD
+	      ,T1.THR_PTY_STE_ID
+	      ,T_THR_PTY_STE.STE_NM THR_PTY_STE_NM
+          ,T1.STE_ID
+          ,T_STE.STE_NM
+	      ,T1.USR_USE_DV
+	      ,T1.USR_TP
+	      ,T1.BZO_ID
+	      ,T_BZO.LV_1_ID
+	      ,T_BZO.LV_1_NM
+	      ,T_BZO.LV_2_ID
+	      ,T_BZO.LV_2_NM
+	      ,T1.EMP_NO
+	      ,T1.PST_CD
+	      ,T1.JIN_YMD
+	      ,T1.FAX_NO
+	      ,T1.DET_ADR_TXT
+	      ,T1.USR_USE_ST
+	      ,T1.VLD_TO_YMD
+	      ,T1.GND_CD
+	FROM   dbo.MS_USR T1
+	       LEFT OUTER JOIN dbo.MS_USR_PW T2
+	               ON (T2.CPN_ID = T1.CPN_ID AND T2.USR_ID = T1.USR_ID)
+	       LEFT OUTER JOIN dbo.MS_BZO_DNM T_BZO
+	               ON (T_BZO.CPN_ID = T1.CPN_ID AND T_BZO.BZO_ID = T1.BZO_ID)
+	       LEFT OUTER JOIN dbo.MS_DPT T_DPT
+	               ON (T_DPT.CPN_ID = T1.CPN_ID AND T_DPT.CPN_ID = T1.CPN_ID AND T_DPT.DPT_ID = T1.DPT_ID)
+	       LEFT OUTER JOIN dbo.MS_CPN T_CPN
+	               ON (T_CPN.CPN_ID = T1.CPN_ID)
+	       LEFT OUTER JOIN dbo.MS_STE T_THR_PTY_STE
+	               ON (T_THR_PTY_STE.CPN_ID = T1.CPN_ID AND T_THR_PTY_STE.STE_ID = T1.THR_PTY_STE_ID)
+           LEFT OUTER JOIN dbo.MS_STE T_STE
+                   ON (T_STE.CPN_ID = T1.CPN_ID AND T_STE.STE_ID = T1.STE_ID)
+	WHERE  T1.CPN_ID = #{cpnId}
+	AND    T1.USR_ID = #{usrId}
+	</select>
+
+	<select id="getUserDetailInfo" parameterType="java.util.Map" resultType="rcpMap">
+	/* MS_USR-SQL.xml - msUsr.getUserDetailInfo */
+	SELECT T1.CPN_ID
+	      ,T1.USR_ID
+	      ,T1.LST_NM
+	      ,T1.FRS_NM
+	      ,T1.DPT_ID
+	      ,T_DPT.DPT_NM
+	      ,T1.NAT_CD
+	      ,T1.MBL_NO
+	      ,T1.EML_ADR
+	      ,T1.ZIP_CD
+	      ,T1.THR_PTY_STE_ID
+	      ,T_THR_PTY_STE.STE_NM THR_PTY_STE_NM
+	      ,T1.USR_USE_DV
+	      ,T1.USR_TP
+	      ,T1.BZO_ID
+	      ,T_BZO.LV_1_ID
+	      ,T_BZO.LV_1_NM
+	      ,T_BZO.LV_2_ID
+	      ,T_BZO.LV_2_NM
+	      ,T1.EMP_NO
+	      ,T1.PST_CD
+	      ,T1.JIN_YMD
+	      ,T1.FAX_NO
+	      ,T1.DET_ADR_TXT
+	      ,T1.USR_USE_ST
+	      ,T1.VLD_TO_YMD
+	      ,T1.GND_CD
+	      ,T1.BTH_YMD
+	      ,T_USR_ADD_INF.DGR_DV
+	      ,T1.USR_EMP_TP
+	      ,T1.STE_ID
+	      ,T_STE.STE_NM
+	FROM   dbo.MS_USR T1
+	       LEFT OUTER JOIN dbo.MS_USR_ADD_INF T_USR_ADD_INF
+	               ON (T_USR_ADD_INF.CPN_ID = T1.CPN_ID AND T_USR_ADD_INF.USR_ID = T1.USR_ID)
+	       LEFT OUTER JOIN dbo.MS_BZO_DNM T_BZO
+	               ON (T_BZO.CPN_ID = T1.CPN_ID AND T_BZO.BZO_ID = T1.BZO_ID)
+	       LEFT OUTER JOIN dbo.MS_DPT T_DPT
+	               ON (T_DPT.CPN_ID = T1.CPN_ID AND T_DPT.DPT_ID = T1.DPT_ID)
+	       LEFT OUTER JOIN dbo.MS_CPN T_CPN
+	               ON (T_CPN.CPN_ID = T1.CPN_ID)
+	       LEFT OUTER JOIN dbo.MS_STE T_STE
+	               ON (T_STE.CPN_ID = T1.CPN_ID AND T_STE.STE_ID = T1.STE_ID)
+	       LEFT OUTER JOIN dbo.MS_STE T_THR_PTY_STE
+	               ON (T_THR_PTY_STE.CPN_ID = T1.CPN_ID AND T_THR_PTY_STE.STE_ID = T1.THR_PTY_STE_ID)
+	WHERE  T1.CPN_ID = #{cpnId}
+	AND    T1.USR_ID = #{usrId}
+	</select>
+
+	<select id="pasingUsrPop" parameterType="java.util.Map" resultType="rcpMap">
+	/* MS_USR-SQL.xml - msUsr.pasingUsrPop */
+	SELECT T1.USR_ID
+	      ,T1.LST_NM + T1.FRS_NM USR_NM
+	      ,T1.USR_TP
+	      ,T_BZO.LV_1_ID
+	      ,T_BZO.LV_1_NM
+	      ,T_BZO.LV_2_ID
+	      ,T_BZO.LV_2_NM
+	      ,T1.DPT_ID
+	      ,T_DPT.DPT_NM
+	      ,T1.CPN_ID
+	      ,T_CPN.CPN_NM
+	      ,T1.FIX_PHN_NO
+	      ,T1.MBL_NO
+	      ,T1.EML_ADR
+	      ,T1.USR_USE_ST
+	      ,T1.STE_ID
+	      ,T_STE.STE_NM
+	FROM   dbo.MS_USR T1
+	       INNER JOIN dbo.MS_BZO_DNM T_BZO
+	          ON(T_BZO.CPN_ID = T1.CPN_ID AND T_BZO.BZO_ID = T1.BZO_ID)
+	       LEFT OUTER JOIN dbo.MS_DPT T_DPT
+	         ON(T_DPT.CPN_ID = T1.CPN_ID AND T_DPT.DPT_ID = T1.DPT_ID)
+	       LEFT OUTER JOIN dbo.MS_CPN T_CPN
+	         ON(T_CPN.CPN_ID = T1.CPN_ID)
+	       LEFT OUTER JOIN dbo.MS_STE T_STE
+	         ON(T_STE.CPN_ID = T1.CPN_ID AND T_STE.STE_ID = T1.STE_ID)
+	<include refid="msUsr.where"></include>
+	ORDER BY T_BZO.LV_1_ID
+	        ,T_BZO.LV_2_ID
+	        ,T1.USR_TP
+	        ,T1.USR_ID
+	<include refid="include.pagingSql" />
+	</select>
+
+	<select id="pasingUsrPopTotalCount" parameterType="java.util.Map" resultType="rcpMap">
+	/* MS_USR-SQL.xml - msUsr.pasingUsrPopTotalCount */
+	SELECT COUNT(*) TOTAL_CNT
+	FROM   dbo.MS_USR T1
+	       INNER JOIN dbo.MS_BZO_DNM T_BZO
+	               ON (T_BZO.CPN_ID = T1.CPN_ID
+	                   AND T_BZO.BZO_ID = T1.BZO_ID)
+	       LEFT OUTER JOIN dbo.MS_DPT T_DPT
+	                    ON (T_DPT.CPN_ID = T1.CPN_ID
+	                        AND T_DPT.DPT_ID = T1.DPT_ID)
+	       LEFT OUTER JOIN dbo.MS_CPN T_CPN
+	                    ON (T_CPN.CPN_ID = T1.CPN_ID)
+	<include refid="msUsr.where"></include>
+	</select>
+
+	<select id="save" parameterType="java.util.Map" statementType="CALLABLE">
+	{CALL dbo.USP_MS_USR_CUD(
+	      #{cprErrNo, mode=INOUT, jdbcType=VARCHAR, javaType=String},
+	      #{cprErrTxt, mode=INOUT, jdbcType=VARCHAR, javaType=String},
+	      #{cpUid},
+	      #{cpIp},
+	      #{cpUsrLngDv},
+	      #{_rowStatus},
+	      #{cpnId},
+	      #{usrId},
+	      #{usrUseSt},
+	      #{frsNm},
+	      #{lstNm},
+	      #{usrTp},
+	      #{usrDetTp},
+	      #{usrIoDv},
+	      #{usrEmpTp},
+	      #{empNo},
+	      #{dptId},
+	      #{pstCd},
+	      #{mblNo},
+	      #{fixPhnNo},
+	      #{faxNo},
+	      #{emlAdr},
+	      #{natCd},
+	      #{zipCd},
+	      #{rgnId},
+	      #{detAdrTxt},
+	      #{gndCd},
+	      #{bthYmd},
+	      #{jinYmd},
+	      #{rsnYmd},
+	      #{marSt},
+	      #{thrPtySteId},
+	      #{usrUseDv},
+	      #{vldToYmd},
+	      #{rolGd},
+	      #{lstUseLngDv},
+	      #{bzoId},
+          #{usrPtoFilSq}
+          )
+	}
+	</select>
+
+	<select id="savePw" parameterType="java.util.Map" statementType="CALLABLE">
+	{CALL dbo.USP_MS_USR_PW_CUD(
+	      #{cprErrNo, mode=INOUT, jdbcType=VARCHAR, javaType=String},
+	      #{cprErrTxt, mode=INOUT, jdbcType=VARCHAR, javaType=String},
+	      #{cpUid},
+	      #{cpIp},
+	      #{cpUsrLngDv},
+	      #{_rowStatus},
+	      #{cpnId},
+	      #{usrId},
+	      #{pwTxt})
+	}
+	</select>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+	<!-- Appender, Layout 설정 -->
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %-5p [%t] %-17c{2} (%13F:%L) %3x - %m%n"/>
+		</Console>
+
+		<!--File name="file" fileName="/usr/share/tomcat/logs/file/rcp.log" append="true">
+			<PatternLayout pattern="%d %-5p [%t] %-17c{2} (%13F:%L) %3x = %m%n"/>
+		</File-->
+
+		<RollingFile name="file" fileName="/usr/share/tomcat/logs/rcp.log" filePattern="/usr/share/tomcat/logs/rcp_%d{yyyy-MM-dd}.log">
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+
+ 	<!-- Logger 설정 -->
+	<Loggers>
+		<Logger name="com.ba" level="DEBUG" additivity="false">
+			<AppenderRef ref="console"/>
+			<AppenderRef ref="file"/>
+		</Logger>
+
+		<Logger name="org.springframework" level="INFO" additivity="false">
+			<AppenderRef ref="console"/>
+			<AppenderRef ref="file"/>
+		</Logger>
+
+		<Logger name="log4jdbc.log4j2" level="ERROR" additivity="false">
+			<appender-ref ref="console"/>
+			<AppenderRef ref="file"/>
+		</Logger>
+
+		<logger name="jdbc.audit" level="OFF"/>
+		<logger name="jdbc.connection" level="OFF"/>
+		<logger name="jdbc.resultset" level="OFF"/>
+		<logger name="jdbc.resultsettable" level="OFF"/>
+		<logger name="jdbc.sqlonly" level="OFF"/>
+		<logger name="jdbc.sqltiming" level="INFO"/>
+
+		<Root level="ERROR">
+			<AppenderRef ref="console"/>
+			<AppenderRef ref="file"/>
+		</Root>
+	</Loggers>
+</Configuration>

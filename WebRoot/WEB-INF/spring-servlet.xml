@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="
+	   				http://www.springframework.org/schema/beans
+	                http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	   				http://www.springframework.org/schema/mvc
+	   				http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+					http://www.springframework.org/schema/context
+					http://www.springframework.org/schema/context/spring-context-4.3.xsd
+					http://www.springframework.org/schema/util
+					http://www.springframework.org/schema/util/spring-util-4.3.xsd
+					">
+
+	<util:properties id="commonProp" location="classpath:common.properties"/>
+
+
+	<!-- Spring MVC Default Setting Init -->
+	<mvc:annotation-driven />
+
+	<!-- Static Resources Process Mapping Default Servlet Handler -->
+	<mvc:default-servlet-handler />
+
+	<!-- Static Resources URI --><!-- 静态资源文件，不会被Spring MVC拦截 -->
+	<mvc:resources location="/resources/**" mapping="/resources/" />
+
+	<!-- MessageConverter -->
+	<mvc:annotation-driven>
+    <mvc:message-converters>
+        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+            <property name="objectMapper" ref="objectMapper"/>
+        </bean>
+        <bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter">
+            <property name="objectMapper" ref="xmlMapper"/>
+        </bean>
+    </mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"
+	      p:indentOutput="true"
+	      p:simpleDateFormat="yyyy-MM-dd"
+	      p:modulesToInstall="com.fasterxml.jackson.module.paramnames.ParameterNamesModule"/>
+
+	<bean id="xmlMapper" parent="objectMapper" p:createXmlMapper="true"/>
+
+	<!---->
+	<bean id="MybatisMapperDynamicLoader" class="com.ba.test.app.service.MybatisMapperDynamicLoader" />
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+	<bean id="exceptionHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver"/>
+
+	<bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+		<property name="cacheSeconds" value="0"/>
+	</bean>
+
+</beans>
