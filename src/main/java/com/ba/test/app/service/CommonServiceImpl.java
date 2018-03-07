@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.ba.test.app.dao.CommonDAO;
 import com.ba.test.app.exception.BizException;
 
-@Service("CommonService")
+@Service("common")
 public class CommonServiceImpl extends AbstractService implements CommonService {
 
 	Logger log = LoggerFactory.getLogger(getClass());

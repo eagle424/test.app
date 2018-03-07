@@ -18,9 +18,17 @@
 
 	<util:properties id="commonProp" location="classpath:common.properties"/>
 
+	<context:component-scan base-package="com.ba.test.app" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
 
 	<!-- Spring MVC Default Setting Init -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven >
+		<!-- MessageConverters  配置类RequestMappingHandlerAdapter-->
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 
 	<!-- Static Resources Process Mapping Default Servlet Handler -->
 	<mvc:default-servlet-handler />
@@ -28,34 +36,9 @@
 	<!-- Static Resources URI --><!-- 静态资源文件，不会被Spring MVC拦截 -->
 	<mvc:resources location="/resources/**" mapping="/resources/" />
 
-	<!-- MessageConverter-->
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-		<property name="messageConverters">
-			<list>
-				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
-			</list>
-		</property>
-	</bean>
-	<!--
-	<mvc:annotation-driven>
-	    <mvc:message-converters>
-	        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-	        </bean>
-	        <bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter">
-	        </bean>
-	    </mvc:message-converters>
-	</mvc:annotation-driven>
-
-	<bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"
-	      p:indentOutput="true"
-	      p:simpleDateFormat="yyyy-MM-dd"
-	      p:modulesToInstall="com.fasterxml.jackson.module.paramnames.ParameterNamesModule"/>
-
-	<bean id="xmlMapper" parent="objectMapper" p:createXmlMapper="true"/>
--->
+	<!-- Mapper.xml dynamic loader -->
 	<bean id="MybatisMapperDynamicLoader" class="com.ba.test.app.service.MybatisMapperDynamicLoader" />
-
+	<!-- 多文件上传 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 
 	<bean id="exceptionHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver"/>

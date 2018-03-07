@@ -12,6 +12,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.util.Assert;
 
+import com.github.pagehelper.PageRowBounds;
+
 public abstract class AbstractDAO extends SqlSessionDaoSupport implements RcpDAO {
 
 	@Override
@@ -95,6 +97,19 @@ public abstract class AbstractDAO extends SqlSessionDaoSupport implements RcpDAO
      */
 	public List<Map<String, Object>> select(String queryId, Map<String, Object> map) throws Exception {
 		return super.getSqlSession().selectList(queryId, map);
+	}
+
+	/**
+	 * 分页查询
+	 *
+	 * @param queryId
+	 * @param map
+	 * @param rowBounds
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> select(String queryId, Map<String, Object> map, RowBounds rowBounds) throws Exception {
+		return super.getSqlSession().selectList(queryId, map, rowBounds);
 	}
 
 

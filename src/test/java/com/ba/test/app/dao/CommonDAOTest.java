@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.ba.test.app.BaseTest;
 import com.ba.test.app.vo.RcpMap;
+import com.github.pagehelper.PageHelper;
 
 public class CommonDAOTest extends BaseTest {
 
@@ -25,7 +26,7 @@ public class CommonDAOTest extends BaseTest {
 	 *
 	 */
 	@Test
-	public void TestA01_001(){
+	public void Test01_R001(){
 		String queryId = "msUsr.list";
 		String cpnId = "CPN0000001";
 		String usrId = "USR00000001";
@@ -39,6 +40,35 @@ public class CommonDAOTest extends BaseTest {
 					System.out.println(entry);
 				}
 			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			fail(TEST_FAIL);
+		}
+
+	}
+
+	/**
+	 * 分页查询
+	 */
+	@Test
+	public void Test02_R002(){
+		String queryId = "msUsr.list";
+		String cpnId = "CPN0000001";
+		String usrId = "USR00000001";
+		String bzoId = "BZO000000122";
+		Map<String, Object> pMap = new RcpMap<String, Object>();
+		pMap.put("cpnId", cpnId);
+		pMap.put("bzoId", bzoId);
+		try {
+			PageHelper.startPage(1, 10);
+			List<Map<String, Object>> list = commonDao.select(queryId, pMap);
+			System.out.println(list.toString());
+
+//			PageRowBounds pageBounds = new PageRowBounds(0, 10);
+//			List<Map<String, Object>> list = commonDao.select(queryId, pMap, pageBounds);
+//			System.out.println(list.toString());
+//			System.out.println(pageBounds.getTotal());
+
 		} catch (Exception e) {
 			e.getStackTrace();
 			fail(TEST_FAIL);

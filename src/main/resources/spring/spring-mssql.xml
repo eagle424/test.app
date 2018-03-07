@@ -17,11 +17,10 @@
 	<!-- Package Annotation Scan -->
 	<context:component-scan base-package="com.ba.test.app" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
 	</context:component-scan>
 
-	  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 		<property name="url" value="jdbc:sqlserver://192.168.0.126:1433;databaseName=RCPBETA" />
 		<property name="username" value="RCPBETAUSER" />
@@ -59,6 +58,20 @@
 				<property name="callSettersOnNulls" value="true" />
 			</bean>
 		</property-->
+
+		<!-- other configuration -->
+		<property name="plugins">
+		  <array>
+		    <bean class="com.github.pagehelper.PageInterceptor">
+		      <property name="properties">
+				<!-- config params as the following -->
+		        <value>
+		        	helperDialect: sqlserver2012
+		        </value>
+		      </property>
+		    </bean>
+		  </array>
+		</property>
 	</bean>
 
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
