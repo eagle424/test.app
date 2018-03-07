@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+
+
+<!-- jQuery -->
+<script type="text/javascript" src="lib/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+
+
+    // 第三种写法（表单序列化为字符串）
+    function getFormInfo1(){
+        console.log($('#login').serialize());
+        params = {
+			queryId: 'msUsr.list',
+			bzoId: 'BZO000000122',
+			usrNm: '李'
+		};
+        $.ajax({
+	         url: "list",
+	         type: "POST",
+	         data: JSON.stringify(params),
+	         contentType: "application/json",
+// 	         contentType: "application/json;charset=UTF-8",
+	         success: function(data){
+
+	         },
+	         error:function(err){
+	         }
+        });
+    }
+    </script>
+</head>
+<body>
+    <form id="login" >
+        <input name="user" type="text" value="111"/>
+        <input name="sex" type="radio" value="man" checked/>
+        <input name="sex" type="radio" value="woman"/>
+        <input type="checkbox" name="interest" value="piu" checked="true">PIU
+        <input type="checkbox" name="interest" value="dss">DSS
+        <input type="checkbox" name="interest" value="ddr">DDR<br>
+        <input type="button" name="submit" value="submit" onclick="getFormInfo1();" />
+        <input type="button" name="submit" value="submit" onclick="getFormInfo2();" />
+        <input type="button" name="submit" value="submit" onclick="getFormInfo3();" />
+        <input type="button" name="submit" value="submit" onclick="getFormInfo4();" />
+    </form>
+
+</body>
+</html>
